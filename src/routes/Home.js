@@ -1,3 +1,4 @@
+import Nweet from 'components/Nweet'
 import { dbService } from 'fbase'
 import React, { useEffect, useState } from 'react'
 
@@ -18,7 +19,7 @@ const Home = ({ userObj }) => {
   // }
   useEffect(() => {
     // getNweets()
-    dbService.collection('nweets').onSnapshot(snapshot => {
+    dbService.collection('nweets').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const nweetArr = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -53,15 +54,17 @@ const Home = ({ userObj }) => {
           onChange={onChange}
         />
         <input
-          type="submit" 
-          value="Nweet" 
+          type="submit"
+          value="Nweet"
         />
       </form>
       <div>
         {nweetList.map(item => (
-          <div key={item.id}>
-            <h4>{item.text}</h4>
-          </div>
+          <Nweet
+            key={item.id}
+            nweetObj={item}
+            isOwner={item.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
