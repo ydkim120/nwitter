@@ -12,7 +12,8 @@ const Nweet = ({
   const onDeleteClick = async () => {
     const ok = window.confirm('정말 이 nweet을 삭제하시겠습니까?')
     if (ok) {
-      await dbService.doc(`nweets/${nweetObj.id}`).delete()
+      await dbService.doc(`nweets/${nweetObj.id}`).delete() // nweet 삭제
+      if (nweetObj?.photoUrl) await storageService.refFromURL(nweetObj.photoUrl).delete() // 사진 저장된 버킷 storage에서 사진 파일 삭제
     }
   }
   // 편집 모드를 토글
