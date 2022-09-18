@@ -1,4 +1,4 @@
-import { dbService } from 'fbase'
+import { dbService, storageService } from 'fbase'
 import React, { useState } from 'react'
 
 const Nweet = ({
@@ -58,6 +58,13 @@ const Nweet = ({
       ) : (
         <>
           <h4>{nweetObj.text}</h4>
+          {nweetObj.photoUrl &&
+            <img 
+              src={nweetObj.photoUrl}
+              width="50px"
+              height="50px"
+            />
+          }
           {isOwner && 
             <>
               <button onClick={onDeleteClick}>Delete</button>

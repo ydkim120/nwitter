@@ -1,12 +1,13 @@
-import Nweet from 'components/Nweet'
-import { dbService } from 'fbase'
 import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import Nweet from 'components/Nweet'
+import { dbService, storageService } from 'fbase'
 
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState('')
   const [nweetList, setNweetList] = useState([])
 
-  const [photo, setPhoto] = useState()
+  const [photo, setPhoto] = useState('')
 
   // 요런 방식은 좀 구식
   // const getNweets = async () => {
@@ -29,14 +30,29 @@ const Home = ({ userObj }) => {
       setNweetList(nweetArr)
     })
   }, [])
+
+  // tweet 제출 이벤트
   const onSubmit = async (event) => {
     event.preventDefault()
-    await dbService.collection('nweets').add({
+
+    let photoUrl = ''
+    if (photo !== '') {
+      const photoRef = storageService
+        .ref()
+        .child(`${userObj.uid}/${uuidv4()}`) // 유저 ID 기반, 파일에 대한 reference 생성
+      const response = await photoRef.putString(photo, 'data_url')
+      photoUrl = await response.ref.getDownloadURL()
+    }
+
+    const nweetItem = {
       text: nweet,
       createdAt: Date.now(),
-      creatorId: userObj?.uid
-    })
+      creatorId: userObj?.uid,
+      photoUrl
+    }
+    await dbService.collection('nweets').add(nweetItem)
     setNweet('')
+    setPhoto('')
   }
 
   // 트윗 작성 input Change 이벤트
@@ -65,7 +81,7 @@ const Home = ({ userObj }) => {
   }
 
   // 업로드 이미지 clear 이벤트
-  const onClearPhoto = () => setPhoto(null)
+  const onClearPhoto = () => setPhoto('')
 
   return (
     <div>
