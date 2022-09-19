@@ -19,7 +19,7 @@ const AppRouter = ({
               <Home userObj={userObj} />
             </Route>
             <Route exact path="/profile">
-              <Profile />
+              <Profile userObj={userObj} />
             </Route>
             {/* 404 페이지 같은 경우 이런 식으로 Redirect를 사용할 수 있음 */}
             {/* <Redirect from="*" to="/" />  */}
