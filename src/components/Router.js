@@ -7,11 +7,12 @@ import Navigation from 'components/Navigation'
 
 const AppRouter = ({
   isLoggedIn,
-  userObj
+  userObj,
+  refreshUser
 }) => {
   return (
     <Router>
-      {isLoggedIn && <Navigation />}
+      {isLoggedIn && <Navigation userObj={userObj} />}
       <Switch>
         {isLoggedIn ? (
           <>
@@ -19,7 +20,10 @@ const AppRouter = ({
               <Home userObj={userObj} />
             </Route>
             <Route exact path="/profile">
-              <Profile userObj={userObj} />
+              <Profile
+                userObj={userObj}
+                refreshUser={refreshUser}
+              />
             </Route>
             {/* 404 페이지 같은 경우 이런 식으로 Redirect를 사용할 수 있음 */}
             {/* <Redirect from="*" to="/" />  */}
