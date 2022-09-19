@@ -1,9 +1,13 @@
 import { authService, dbService } from 'fbase'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
-export default ({ userObj }) => {
+export default ({ 
+  userObj,
+  refreshUser
+}) => {
   const history = useHistory()
+  const [newDisplayName, setNewDisplayName] = useState(userObj.displayName)
 
   //로그아웃 이벤트
   // Home으로 라우팅
@@ -25,8 +29,38 @@ export default ({ userObj }) => {
   useEffect(() => {
     getMyNweets()
   }, [])
+
+  // displayName 입력 이벤트
+  const onChangeDisplayName = (event) => {
+    const {
+      target: { value }
+    } = event
+    setNewDisplayName(value)
+  }
+  // displayName 변경 이벤트
+  const onSubmitDisplayName = async (event) => {
+    event.preventDefault()
+    if (userObj.displayName !== newDisplayName) {
+      await userObj.updateProfile({ // firebase의 유저 정보 업데이트
+        displayName: newDisplayName
+      })
+      refreshUser() // 유저 정보 동기화
+    }
+  }
   return (
     <>
+      <form onSubmit={onSubmitDisplayName}>
+        <input
+          type="text"
+          placeholder="Display Name"
+          value={newDisplayName}
+          onChange={onChangeDisplayName}
+        />
+        <input
+          type="submit"
+          value="Update Profile"
+        />
+      </form>
       <button onClick={onLogOutClick}>Log Out</button>
     </>
   )
