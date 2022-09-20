@@ -2,7 +2,7 @@ import { authService, dbService } from 'fbase'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
-export default ({ 
+export default ({
   userObj,
   refreshUser
 }) => {
