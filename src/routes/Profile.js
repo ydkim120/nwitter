@@ -48,20 +48,34 @@ export default ({
     }
   }
   return (
-    <>
-      <form onSubmit={onSubmitDisplayName}>
+    <div className="container">
+      <form 
+        onSubmit={onSubmitDisplayName}
+        className="profileForm"
+      >
         <input
           type="text"
           placeholder="Display Name"
           value={newDisplayName}
           onChange={onChangeDisplayName}
+          autoFocus
+          className="formInput"
         />
         <input
           type="submit"
           value="Update Profile"
+          className="formBtn"
+          style={{
+            marginTop: 10,
+          }}
         />
       </form>
-      <button onClick={onLogOutClick}>Log Out</button>
-    </>
+      <a
+        className="formBtn cancelBtn logOut"
+        onClick={onLogOutClick}
+      >
+        Log Out
+      </a>
+    </div>
   )
 }
